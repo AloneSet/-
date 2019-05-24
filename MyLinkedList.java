@@ -198,15 +198,13 @@ public class MyLinkedList<E> {
 			throw new ArrayIndexOutOfBoundsException("index:"+index);
 	}
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		Node<E> temp = first;
-		sb.append("[");
-		for(int i = 0; i < size; i++) {
-			sb.append(temp.data+",");
-			temp = temp.next;
-		}
-			
-		sb.replace(sb.length()-1, sb.length(), "]");
+		StringBuilder sb = new StringBuilder("[");
+		for(Node<E> temp = first; temp != null; temp = temp.next)
+			sb.append(temp.data+", ");
+		if(sb.length()>2)
+			sb.replace(sb.length()-2, sb.length(), "]");
+		else
+			sb.append("]");	
 		return sb.toString();
 	}
 }
