@@ -1,7 +1,7 @@
 package com.cy.collection;
 
 /**
- * 	简陋的HashMap，省略了红黑树的实现，hash值的一些问题
+ * 简陋的HashMap，省略了红黑树的实现，hash值的一些问题，也只实现了增删该查的功能
  * @author Alone
  */
 public class MyHashMap<K,V> {
@@ -27,7 +27,6 @@ public class MyHashMap<K,V> {
 	private static final int DEFUALT_CAPACITY= 1 << 4; // 数组初始化长度为16
 	private static final int MAXIMUM_CAPACITY= 1 << 30; // 最大容量
 	private int size;
-	public int arrL;
 	public MyHashMap() { this(DEFUALT_CAPACITY); }
 	public MyHashMap(int initCapacity) {
 		if(initCapacity < 0) 
@@ -38,7 +37,7 @@ public class MyHashMap<K,V> {
 			initCapacity = tableSizeFor(initCapacity);
 		this.dataTable = new Node[initCapacity];
 	}
-	// 为了保证数组的长度一定是2的n次方，所以直接采用了HashMap中的算法
+	// 为了保证数组的长度一定是2的n次方，所以直接采用了HashMap源码中的算法
 	private int tableSizeFor(int initCapacity) {
 		int n = initCapacity - 1;
         n |= n >>> 1;
@@ -99,6 +98,7 @@ public class MyHashMap<K,V> {
 		if(++size >= dataTable.length*0.75) grow(dataTable.length);  //
 		return null;
 	}
+	// 通过Key获取value
 	public V get(K key) {
 		V value = null;
 		for (int i = dataTable.length, prevHash = -1; i >= 16; i >>= 1) {
@@ -110,7 +110,7 @@ public class MyHashMap<K,V> {
 		}
 		return value;
 	}
-	// 通过key取元素
+	// 通过key和hash值获取value
 	private V getNode(K key, int hash) {
 		Node<K,V> target = dataTable[hash];
 		if(key == null) {
@@ -124,6 +124,7 @@ public class MyHashMap<K,V> {
 		}
 		return null;
 	}
+	// 通过Key删除元素
 	public V remove(K key) {
 		V value = null;
 		for (int i = dataTable.length, prevHash = -1; i >= 16; i >>= 1) {
@@ -135,14 +136,14 @@ public class MyHashMap<K,V> {
 		}
 		return value;
 	}
-	// 根据key删除元素
-	public V removeNode(K key, int index) {
-		Node<K,V> target = dataTable[index];
+	// 通过key和hash值删除节点
+	private V removeNode(K key, int hash) {
+		Node<K,V> target = dataTable[hash];
 		if(null == target) return null;
 		Node<K,V> node = null;
 		if(key == null) {
 			if(null == target.key) {
-				dataTable[index] = target.next;
+				dataTable[hash] = target.next;
 				size--;
 				return target.value;
 			}
@@ -156,7 +157,7 @@ public class MyHashMap<K,V> {
 			}
 		}else {
 			if(key.equals(target.key)) {
-				dataTable[index] = target.next;
+				dataTable[hash] = target.next;
 				size--;
 				return target.value;
 			}
@@ -170,9 +171,6 @@ public class MyHashMap<K,V> {
 			}
 		}
 		return null;
-	}
-	public int length() {
-		return dataTable.length;
 	}
 	// 返回元素个数
 	public int size() {
@@ -193,11 +191,11 @@ public class MyHashMap<K,V> {
 				}
 			}
 		}
-		if(sb.length()>3) {
+		if(sb.length()>2) 
 			sb.replace(sb.length()-2, sb.length(), "}");
-		}else {
+		else 
 			sb.append("}");
-		}
+		
 		return sb.toString();
 	}
 }
