@@ -1,22 +1,24 @@
 package com.cy.collection;
 
 /**
- * 自定义LinkedList集合
+ * 自定义LinkedList集合，只实现了增删改查等基础功能
  * @author Alone
  * @param <E>
  */
 public class MyLinkedList<E> {
 	private Node<E> first; // 第一个节点
 	private Node<E> last; // 最后一个节点
-	private int size;
+	private int size; // 元素个数
 	
 	public int size() {
 		return size;
 	}
+	// 增加节点
 	public boolean add(E element) {
 		linkLast(element);
 		return true;
 	}
+	// 插入节点
 	public boolean add(int index, E element) {
 		checkIndex(index);
 		if(index == 0) {
@@ -29,6 +31,7 @@ public class MyLinkedList<E> {
 		}
 		return true;
 	}
+	// 在链表首段添加一个节点
 	private void linkFirst(E element) {
 		final Node<E> f = first;
 		final Node<E> newNode = new Node<E>(null, element, f);
@@ -40,6 +43,7 @@ public class MyLinkedList<E> {
 		}
 		size++;
 	}
+	// 把节点添加在链表末端
 	private void linkLast(E element) {
 		final Node<E> l = last;
 		final Node<E> newNode = new Node<E>(l, element, null);
@@ -51,7 +55,7 @@ public class MyLinkedList<E> {
 		}
 		size++;
 	}
-	// insert element e before non-null Node suc;
+	// 插入一个节点e，在节点suc之前，suc不为空
 	private void linkBefore(E element, Node<E> suc) {
 		final Node<E> pred = suc.prev;
 		final Node<E> newNode = new Node<>(pred, element, suc);
@@ -62,7 +66,7 @@ public class MyLinkedList<E> {
 			pred.next = newNode;
 		size++;
 	}
-	
+	// 按照指定元素删除节点 
 	public boolean remove(E element) {
 		if(element == null) {
 			for(Node<E> temp = first; temp != null; temp = temp.next) {
@@ -81,12 +85,14 @@ public class MyLinkedList<E> {
 		}
 		return false;
 	}
+	// 按照指定索引删除节点
 	public E remove(int index) {
 		checkIndex(index);
 		if(index == 0) return removeFirst(first);
 		if(index == size - 1) return removeLast(last);
 		return removeNode(node(index));
 	}
+	// 删除第一个节点
 	private E removeFirst(Node<E> f) {
 		Node<E> nextd = f.next;
 		if(nextd == null) {
@@ -98,6 +104,7 @@ public class MyLinkedList<E> {
 		size--;
 		return f.data;
 	}
+	// 删除最后一个节点
 	private E removeLast(Node<E> l) {
 		Node<E> pred = l.prev;
 		if(pred == null) {
@@ -109,6 +116,7 @@ public class MyLinkedList<E> {
 		size--;
 		return l.data;
 	}
+	// 删除节点
 	private E removeNode(Node<E> n) {
 		Node<E> pred = n.prev;
 		Node<E> nextd = n.next;
@@ -128,10 +136,12 @@ public class MyLinkedList<E> {
 		size--;
 		return n.data;
 	}
+	// 修改指定索引上的元素
 	public boolean set(int index, E element) {
 		node(index).data = element;
 		return true;
 	}
+	// 查找元素
 	public int indexOf(E element) {
 		Node<E> temp = first;
 		if(element == null) {
@@ -147,7 +157,7 @@ public class MyLinkedList<E> {
 		}
 		return -1;
 	}
-	
+	// 节点类
 	@SuppressWarnings("hiding")
 	private class Node<E>{
 		E data;
@@ -160,12 +170,14 @@ public class MyLinkedList<E> {
 			this.next = next;
 		}
 	}
+	// 按照指定索引获取元素
 	public E get(int index) {
 		checkIndex(index);
 		Node<E> temp = node(index);
 		if(null != temp) return temp.data;
 		return null;
 	}
+	// 按照指定索引查找节点
 	private Node<E> node(int index){
 		Node<E> temp = null;
 		if(index < (size>>1)) {
