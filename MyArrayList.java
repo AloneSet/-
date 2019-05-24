@@ -7,10 +7,10 @@ package com.cy.collection;
  */
 public class MyArrayList<E>{
 
-	private Object [] datas;
-	private int size;
-	private static final Object[] DEFAULT_ARRAY = {};
-	private static final int DEFAULT_CAPACITY = 10;
+	private Object [] datas; // 数据存放的容器
+	private int size; // 元素的个数
+	private static final Object[] DEFAULT_ARRAY = {}; // 默认的空数组
+	private static final int DEFAULT_CAPACITY = 10; // 默认容量大小
 	
 	public MyArrayList(){
 		this(DEFAULT_CAPACITY);
@@ -37,11 +37,13 @@ public class MyArrayList<E>{
 		size++;
 		return true;
 	}
+	// 按照指定索引删除元素
 	public boolean remove(int index) {
 		checkIndex(index);
 		fastRemove(index);
 		return true;
 	}
+	// 删除数组中的指定元素，只能删除一个，若有多个相同的元素，则删除索引最靠前的一个
 	public boolean remove(E element) {
 		if(element == null) {
 			for (int i = 0; i < size ; i++) {
@@ -60,6 +62,7 @@ public class MyArrayList<E>{
 		}
 		return false;
 	}
+	// 删除数组中指定所有的元素
 	public boolean removeAll(E element) {
 		if(element == null) {
 			for (int i = 0; i < size; i++) {
@@ -145,11 +148,13 @@ public class MyArrayList<E>{
 	
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder("[");
 		for(int i = 0; i < size; i++)
-			sb.append(get(i)+",");
-		sb.replace(sb.length()-1, sb.length(), "]");
+			sb.append(get(i)+", ");
+		if(sb.length()>2)
+			sb.replace(sb.length()-2, sb.length(), "]");
+		else
+			sb.append("]");
 		return sb.toString();
 	}
 }
